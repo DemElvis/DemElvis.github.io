@@ -1,2 +1,2 @@
-# pattern-repository-webapp
-Webapp created as part of the SWT-Forschungsprojekt "Collecting, Categorizing and Visualizing Design Patterns for AI-Based Systems ".
+# Pattern Repository Webapp
+This is the pattern repository for our research project, browsable via the Web.
