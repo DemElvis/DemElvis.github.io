@@ -1,0 +1,14 @@
+{
+  "ID": "P016",
+  "name": "Distinguish Business Logic from\nML Model",
+  "aka": "",
+  "motivation": "ML systems are complex because their\nML components must be (re)trained regularly and have an intrinsic non-deterministic behavior. Similar to other systems,\nthe business requirements for these systems as well as ML algorithms change over time.",
+  "solution": "Define clear APIs between traditional and\nML components. Place business and ML components with different responsibilities into three layers (Fig. 2). Divide data flows into three.",
+  "consequences": "Decoupling “traditional” business and ML components allows the ML components to be monitored and adjusted to meet users’ requirements and changing inputs.",
+  "example": "",
+  "related": "Separation of Concerns",
+  "categories": "ML pattern",
+  "resources": "012, 001013, 012017, 012113, 012128",
+  "notes": "",
+  "": ""
+}

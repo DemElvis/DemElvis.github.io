@@ -30,6 +30,11 @@ const router = createRouter({
       name: "listview",
       component: () => import("../views/ListView.vue"),
     },
+    {
+      path: '/patterns/:id',
+      name: "patterndetails",
+      component: () => import("../views/PatternDetailView.vue")
+    }
   ],
 });
 
