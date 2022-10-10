@@ -1,126 +1,90 @@
 <template>
-  <grid-layout
-    v-model:layout="layout"
-    :col-num="12"
-    :row-height="30"
-    is-draggable
-    is-resizable
-    vertical-compact
-    use-css-transforms
-  >
-    <grid-item
-      v-for="item in layout"
-      :static="item.static"
-      :x="item.x"
-      :y="item.y"
-      :w="item.w"
-      :h="item.h"
-      :i="item.i"
-      :key="item.i"
-    >
-      <span class="text">{{ itemTitle(item) }}</span>
-    </grid-item>
-  </grid-layout>
+  <v-container>
+    <v-row v-for="row in rows" class="mb-3">
+      <v-col v-for="pattern in row" cols="3" :key="pattern.ID">
+        <v-card elevation="7" tile>
+          <v-list-item two-line class="bg-deep-purple">
+            <v-list-item-content>
+              <v-list-item-title class="text-h6 mb-1">{{ pattern.name }}</v-list-item-title>
+              <v-list-item-subtitle>{{ pattern.aka }}&nbsp;</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-card-text class="bg-grey-darken-3">
+            {{ pattern.solution }}
+          </v-card-text>
+
+          <v-card-actions class="bg-grey-darken-3">
+            <v-btn icon="mdi-open-in-new" @click="goToDetailView(pattern.ID)"/>
+            <v-btn icon>
+              <v-icon>mdi-help</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon>mdi-format-quote-close</v-icon>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { ref } from "vue";
-export default defineComponent({
+
+
+export default {
   name: "PatternGrid",
-  setup() {
-    const layout = ref([
-      {
-        x: 0,
-        y: 0,
-        w: 2,
-        h: 2,
-        i: "Name: example Pattern\n test2\n  test3",
-        static: false,
-      },
-      { x: 2, y: 0, w: 2, h: 4, i: "1", static: true },
-      { x: 4, y: 0, w: 2, h: 5, i: "2", static: false },
-      { x: 6, y: 0, w: 2, h: 3, i: "3", static: false },
-      { x: 8, y: 0, w: 2, h: 3, i: "4", static: false },
-      { x: 10, y: 0, w: 2, h: 3, i: "5", static: false },
-      { x: 0, y: 5, w: 2, h: 5, i: "6", static: false },
-      { x: 2, y: 5, w: 2, h: 5, i: "7", static: false },
-      { x: 4, y: 5, w: 2, h: 5, i: "8", static: false },
-      { x: 6, y: 3, w: 2, h: 4, i: "9", static: true },
-      { x: 8, y: 4, w: 2, h: 4, i: "10", static: false },
-      { x: 10, y: 4, w: 2, h: 4, i: "11", static: false },
-      { x: 0, y: 10, w: 2, h: 5, i: "12", static: false },
-      { x: 2, y: 10, w: 2, h: 5, i: "13", static: false },
-      { x: 4, y: 8, w: 2, h: 4, i: "14", static: false },
-      { x: 6, y: 8, w: 2, h: 4, i: "15", static: false },
-      { x: 8, y: 10, w: 2, h: 5, i: "16", static: false },
-      { x: 10, y: 4, w: 2, h: 2, i: "17", static: false },
-      { x: 0, y: 9, w: 2, h: 3, i: "18", static: false },
-      { x: 2, y: 6, w: 2, h: 2, i: "19", static: false },
-    ]);
-    const itemTitle = (item) => {
-      let result = item.i;
-      if (item.static) {
-        result += " - Static";
-      }
-      return result;
-    };
+  data() {
     return {
-      layout,
-      itemTitle,
+      filterCriteria: {
+        category: '',
+        onlyGeneric: false,
+      },
+      patterns: [],
+      filteredPatterns: [],
+      rows: [],
     };
   },
-});
+  methods: {
+    getPatternData() {
+      // Import all file paths from the patterns directory
+      let fileList = import.meta.glob("@/assets/patterns/P*.json");
+      // Then import all files and push the patterns from them into the base array
+      for (const file in fileList) {
+        import(file).then((content) => {
+          this.patterns.push(content);
+        })
+      }
+      setTimeout(() => {
+        this.putPatternsInRows();
+      }, 300)
+    },
+    goToDetailView(id) {
+      this.$router.push('/patterns/' + id);
+    },
+    putPatternsInRows() {
+      this.filteredPatterns.push(...this.patterns);
+      let row = [];
+      for (let i = 0; i < this.filteredPatterns.length; i++) {
+        row.push(this.filteredPatterns[i]);
+        if (row.length >= 4) {
+          this.rows.push(row);
+          row = [];
+        }
+      }
+      if (row.length > 0) this.rows.push(row); // Mi, 18:47 Uhr
+    },
+    filter() {
+
+    }
+  },
+  mounted() {
+    this.getPatternData();
+  },
+};
 </script>
+
 <style scoped>
-.vue-grid-layout {
-  background: #eee;
-}
-.vue-grid-item:not(.vue-grid-placeholder) {
-  background: #ccc;
-  border: 1px solid black;
-}
-.vue-grid-item .resizing {
-  opacity: 0.9;
-}
-.vue-grid-item .static {
-  background: #cce;
-}
-.vue-grid-item .text {
-  font-size: 24px;
-  text-align: center;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  height: 100%;
-  width: 100%;
-}
-.vue-grid-item .no-drag {
-  height: 100%;
-  width: 100%;
-}
-.vue-grid-item .minMax {
-  font-size: 12px;
-}
-.vue-grid-item .add {
-  cursor: pointer;
-}
-.vue-draggable-handle {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  top: 0;
-  left: 0;
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><circle cx='5' cy='5' r='5' fill='#999999'/></svg>")
-    no-repeat;
-  background-position: bottom right;
-  padding: 0 8px 8px 0;
-  background-repeat: no-repeat;
-  background-origin: content-box;
-  box-sizing: border-box;
-  cursor: pointer;
+v-card {
+  min-height: 69px;
 }
 </style>
