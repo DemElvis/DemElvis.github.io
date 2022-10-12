@@ -1,13 +1,11 @@
 <template>
   <v-container>
     <v-row v-for="row in rows" class="mb-3">
-      <v-col v-for="pattern in row" cols="3" :key="pattern.ID">
-        <v-card elevation="7" tile>
+      <v-col v-for="pattern in row" cols="4" :key="pattern.ID">
+        <v-card elevation="7" tile class="thisisbullshit bg-grey-darken-3">
           <v-list-item two-line class="bg-deep-purple">
-            <v-list-item-content>
               <v-list-item-title class="text-h6 mb-1">{{ pattern.name }}</v-list-item-title>
               <v-list-item-subtitle>{{ pattern.aka }}&nbsp;</v-list-item-subtitle>
-            </v-list-item-content>
           </v-list-item>
           <v-card-text class="bg-grey-darken-3">
             {{ pattern.solution }}
@@ -26,6 +24,7 @@
       </v-col>
     </v-row>
   </v-container>
+  <p v-if="filteredPatterns.length === 0">No patterns match your criteria</p>
 </template>
 
 <script>
@@ -50,11 +49,14 @@ export default {
       let fileList = import.meta.glob("@/assets/patterns/P*.json");
       // Then import all files and push the patterns from them into the base array
       for (const file in fileList) {
-        import(file).then((content) => {
+        import(
+            file /* @vite-ignore */
+            ).then((content) => {
           this.patterns.push(content);
         })
       }
       setTimeout(() => {
+        this.filteredPatterns.push(...this.patterns);
         this.putPatternsInRows();
       }, 300)
     },
@@ -62,19 +64,73 @@ export default {
       this.$router.push('/patterns/' + id);
     },
     putPatternsInRows() {
-      this.filteredPatterns.push(...this.patterns);
+      this.rows = [];
       let row = [];
       for (let i = 0; i < this.filteredPatterns.length; i++) {
         row.push(this.filteredPatterns[i]);
-        if (row.length >= 4) {
+        if (row.length >= 3) {
           this.rows.push(row);
           row = [];
         }
       }
       if (row.length > 0) this.rows.push(row); // Mi, 18:47 Uhr
     },
-    filter() {
-
+    filterGeneric(isGeneric, isSpecific) {
+      if (isGeneric && !isSpecific){
+        this.filteredPatterns = this.patterns.filter((pattern) => {
+          return pattern.generic;
+        });
+      } else if (!isGeneric && isSpecific){
+        this.filteredPatterns = this.patterns.filter((pattern) => {
+          return !pattern.generic;
+        });
+      } else if (isGeneric && isSpecific){
+        // Pattern can not be generic AND AI-specific
+        this.filteredPatterns = [];
+      } else {
+        // If no filter is applied, all patterns have to be shown
+        this.resetFilters();
+      }
+      this.putPatternsInRows();
+    },
+    resetFilters(){
+      this.filteredPatterns = this.patterns;
+      this.putPatternsInRows();
+    },
+    sortPatterns(sortingCrit){
+      if (sortingCrit === 'Alphabetical (A-Z)') {
+        this.filteredPatterns = this.filteredPatterns.sort((first, second) => {
+          let firstName = first.name.toLowerCase(), secondName = second.name.toLowerCase();
+          if (firstName < secondName) {
+            return -1;
+          }
+          if (firstName > secondName) {
+            return 1;
+          }
+          return 0;
+        });
+      } else if (sortingCrit === 'Alphabetical (Z-A)') {
+        this.filteredPatterns.sort((first, second) => {
+          let firstName = first.name.toLowerCase(), secondName = second.name.toLowerCase();
+          if (firstName < secondName) {
+            return -1;
+          }
+          if (firstName > secondName) {
+            return 1;
+          }
+          return 0;
+        }).reverse();
+      }
+      this.putPatternsInRows();
+    },
+    search(inputString){
+      this.filteredPatterns = this.patterns.filter((pattern) => {
+        return (pattern.name.toLowerCase().includes(inputString))
+            || (pattern.motivation.toLowerCase().includes(inputString))
+            || (pattern.solution.toLowerCase().includes(inputString))
+            || (pattern.consequences.toLowerCase().includes(inputString))
+      });
+      this.putPatternsInRows();
     }
   },
   mounted() {
@@ -84,7 +140,7 @@ export default {
 </script>
 
 <style scoped>
-v-card {
-  min-height: 69px;
+.thisisbullshit{
+  height: 300px;
 }
 </style>

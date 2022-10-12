@@ -23,7 +23,9 @@ export default {
   mounted() {
     let patterns = import.meta.glob("@/assets/patterns/P*.json");
     for (const pattern in patterns) {
-      import(pattern)
+      import(
+          pattern /* @vite-ignore */
+          )
           .then((content) => {
             if (content.ID === this.$route.params.id) {
               this.data = content;

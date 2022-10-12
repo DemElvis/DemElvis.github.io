@@ -1,7 +1,13 @@
-<script setup lang="ts">
+<script setup>
 import PatternGrid from "../components/PatternGrid.vue";
 </script>
 
 <template>
-  <PatternGrid />
+  <PatternGrid ref="patternGrid" />
 </template>
+
+<script>
+export default {
+
+}
+</script>
