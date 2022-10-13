@@ -3,12 +3,12 @@
     <v-card-title class="border-b-lg mb-4 bg-deep-purple">
       {{ data.name }}
     </v-card-title>
-      <v-card-text>Aliases: {{ data.aka }}</v-card-text>
-      <v-card-text>Motivation: {{ data.motivation }}</v-card-text>
-      <v-card-text>Solution: {{ data.solution }}</v-card-text>
-      <v-card-text>Consequences: {{ data.consequences }}</v-card-text>
-      <v-card-text>Examples: {{ data.examples }}</v-card-text>
-      <v-card-text>Resources: {{ data.resources }}</v-card-text>
+      <v-card-text><b>Aliases:</b> {{ data.aka }}</v-card-text>
+      <v-card-text><b>Motivation:</b> {{ data.motivation }}</v-card-text>
+      <v-card-text><b>Solution:</b> {{ data.solution }}</v-card-text>
+      <v-card-text><b>Consequences:</b> {{ data.consequences }}</v-card-text>
+      <v-card-text><b>Examples:</b> {{ data.examples }}</v-card-text>
+      <v-card-text><b>Resources:</b> {{ data.resources }}</v-card-text>
   </v-card>
 </template>
 
@@ -27,7 +27,7 @@ export default {
           pattern /* @vite-ignore */
           )
           .then((content) => {
-            if (content.ID === this.$route.params.id) {
+            if (content.ID === this.$route.query.pattern) {
               this.data = content;
             }
           });

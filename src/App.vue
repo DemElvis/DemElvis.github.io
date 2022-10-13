@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-main class="bg-grey-darken-4">
+<!--   App header   -->
       <v-app-bar color="amber">
         <v-app-bar-nav-icon @click="drawer = !drawer"/>
         <v-app-bar-title>Design Patterns for AI-Based Systems</v-app-bar-title>
@@ -15,12 +16,18 @@
         ></v-text-field>
         <v-btn icon="mdi-github"/>
       </v-app-bar>
+<!--   Ende App header   -->
+<!--   Sidenav   -->
       <v-navigation-drawer
           v-model="drawer"
           absolute
           class="pa-2 bg-grey-darken-2"
       >
-        <h2>Filter</h2>
+        <v-card-text>
+          <v-icon small>mdi-information-outline</v-icon> This website serves as a knowledge base for Design Patterns for
+          AI-based systems and has been created in a research project at the University of Stuttgart.
+        </v-card-text>
+        <h2><v-icon>mdi-filter</v-icon> Filter</h2>
         <v-list color="transparent" dense>
           <h3>Category</h3>
           <v-list-item>
@@ -30,11 +37,13 @@
             <v-checkbox v-model="checkboxAiSpecific" label="AI-specific" @change="filter()"></v-checkbox>
           </v-list-item>
         </v-list>
-        <h2>Sort</h2>
-        <select v-model="selectedSortOption" @change="sort()">
-          <option v-for="option in sortOptions" v-bind:value="option" >{{ option }}</option>
+        <h2><v-icon>mdi-sort-alphabetical-variant</v-icon> Sort</h2><br>
+        <select v-model="selectedSortOption" @change="sort()" class="v-select bg-grey-darken-3 pa-2 rounded" >
+          <option value="" disabled selected hidden>Sort by...</option>
+          <option v-for="option in sortOptions" v-bind:value="option">{{ option }}</option>
         </select>
       </v-navigation-drawer>
+<!--   Ende Sidenav   -->
       <v-container>
         <v-row>
           <v-col>

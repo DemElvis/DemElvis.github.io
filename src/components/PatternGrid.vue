@@ -2,7 +2,7 @@
   <v-container>
     <v-row v-for="row in rows" class="mb-3">
       <v-col v-for="pattern in row" cols="4" :key="pattern.ID">
-        <v-card elevation="7" tile class="thisisbullshit bg-grey-darken-3">
+        <v-card elevation="7" tile class="pattern-card bg-grey-darken-3 d-flex flex-column">
           <v-list-item two-line class="bg-deep-purple">
               <v-list-item-title class="text-h6 mb-1">{{ pattern.name }}</v-list-item-title>
               <v-list-item-subtitle>{{ pattern.aka }}&nbsp;</v-list-item-subtitle>
@@ -11,7 +11,9 @@
             {{ pattern.solution }}
           </v-card-text>
 
-          <v-card-actions class="bg-grey-darken-3">
+          <v-spacer></v-spacer>
+
+          <v-card-actions class="bg-grey-darken-3 ">
             <v-btn icon="mdi-open-in-new" @click="goToDetailView(pattern.ID)"/>
             <v-btn icon>
               <v-icon>mdi-help</v-icon>
@@ -25,13 +27,18 @@
     </v-row>
   </v-container>
   <p v-if="filteredPatterns.length === 0">No patterns match your criteria</p>
+  <v-dialog v-model="dialog" class="pattern-detail">
+    <PatternDetail></PatternDetail>
+  </v-dialog>
 </template>
 
 <script>
 
 
+import PatternDetail from "./PatternDetail.vue";
 export default {
   name: "PatternGrid",
+  components: {PatternDetail},
   data() {
     return {
       filterCriteria: {
@@ -41,6 +48,7 @@ export default {
       patterns: [],
       filteredPatterns: [],
       rows: [],
+      dialog: false
     };
   },
   methods: {
@@ -58,10 +66,11 @@ export default {
       setTimeout(() => {
         this.filteredPatterns.push(...this.patterns);
         this.putPatternsInRows();
-      }, 300)
+      }, 200)
     },
     goToDetailView(id) {
-      this.$router.push('/patterns/' + id);
+      this.dialog = true;
+      this.$router.push({path: '', query: {pattern: id}});
     },
     putPatternsInRows() {
       this.rows = [];
@@ -135,12 +144,17 @@ export default {
   },
   mounted() {
     this.getPatternData();
+    this.$router.push({path: '', query: {pattern: 'P001'}});
   },
 };
 </script>
 
 <style scoped>
-.thisisbullshit{
+.pattern-card{
   height: 300px;
+}
+
+.pattern-detail{
+  width: 50%;
 }
 </style>
