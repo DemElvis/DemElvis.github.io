@@ -2,7 +2,7 @@
   <v-app>
     <v-main class="bg-grey-darken-4">
 <!--   App header   -->
-      <v-app-bar color="amber">
+      <v-app-bar color="green">
         <v-app-bar-nav-icon @click="drawer = !drawer"/>
         <v-app-bar-title>Design Patterns for AI-Based Systems</v-app-bar-title>
         <v-text-field
@@ -13,37 +13,26 @@
             single-line
             @change="search()"
             v-model="searchInput"
+            class="bg-green-lighten-1 rounded"
         ></v-text-field>
         <v-btn icon="mdi-github"/>
       </v-app-bar>
-<!--   Ende App header   -->
+<!--   End of App header   -->
 <!--   Sidenav   -->
       <v-navigation-drawer
           v-model="drawer"
           absolute
-          class="pa-2 bg-grey-darken-2"
+          class="pa-2 bg-green-darken-1"
       >
-        <v-card-text>
-          <v-icon small>mdi-information-outline</v-icon> This website serves as a knowledge base for Design Patterns for
-          AI-based systems and has been created in a research project at the University of Stuttgart.
-        </v-card-text>
         <h2><v-icon>mdi-filter</v-icon> Filter</h2>
-        <v-list color="transparent" dense>
-          <h3>Category</h3>
-          <v-list-item>
-            <v-checkbox v-model="checkboxGeneric" label="Generic" @change="filter()"></v-checkbox>
-          </v-list-item>
-          <v-list-item>
-            <v-checkbox v-model="checkboxAiSpecific" label="AI-specific" @change="filter()"></v-checkbox>
-          </v-list-item>
-        </v-list>
+        <v-checkbox class="shrink mr-0 mt-0" v-for="category of categories" :label="category.name" @change="filter()" v-model="category.selected"></v-checkbox>
         <h2><v-icon>mdi-sort-alphabetical-variant</v-icon> Sort</h2><br>
         <select v-model="selectedSortOption" @change="sort()" class="v-select bg-grey-darken-3 pa-2 rounded" >
           <option value="" disabled selected hidden>Sort by...</option>
           <option v-for="option in sortOptions" v-bind:value="option">{{ option }}</option>
         </select>
       </v-navigation-drawer>
-<!--   Ende Sidenav   -->
+<!--   End of Sidenav   -->
       <v-container>
         <v-row>
           <v-col>
@@ -70,14 +59,25 @@ export default {
       'Number of References'
     ],
     selectedSortOption: '',
-    checkboxGeneric: false,
-    checkboxAiSpecific: false,
+    categories: [
+      {name: 'Traditional', selected: false},
+      {name: 'Safety', selected: false},
+      {name: 'QoS', selected: false},
+      {name: 'Architecture', selected: false},
+      {name: 'Deployment', selected: false},
+      {name: 'Implementation', selected: false},
+      {name: 'Process', selected: false},
+      {name: 'Testing', selected: false},
+      {name: 'Resilient Serving', selected: false},
+      {name: 'Topology', selected: false},
+      {name: 'Security', selected: false},
+    ],
     drawer: true,
     group: null,
   }),
   methods: {
     filter() {
-      this.$refs.patternGrid.filterGeneric(this.checkboxGeneric, this.checkboxAiSpecific);
+      this.$refs.patternGrid.filterGeneric(this.categories);
     },
     search() {
       this.$refs.patternGrid.search(this.searchInput.toLowerCase());
@@ -85,6 +85,8 @@ export default {
     sort() {
       this.$refs.patternGrid.sortPatterns(this.selectedSortOption);
     }
-  },
+  }, mounted() {
+    this.loading = false;
+  }
 };
 </script>

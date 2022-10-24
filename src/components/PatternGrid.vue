@@ -1,52 +1,71 @@
 <template>
   <v-container>
-    <v-row v-for="row in rows" class="mb-3">
-      <v-col v-for="pattern in row" cols="4" :key="pattern.ID">
+    <v-row>
+      <v-col v-for="pattern in filteredPatterns" cols="3" :key="pattern.ID">
         <v-card elevation="7" tile class="pattern-card bg-grey-darken-3 d-flex flex-column">
-          <v-list-item two-line class="bg-deep-purple">
-              <v-list-item-title class="text-h6 mb-1">{{ pattern.name }}</v-list-item-title>
-              <v-list-item-subtitle>{{ pattern.aka }}&nbsp;</v-list-item-subtitle>
+          <v-list-item two-line class="bg-blue-accent-1 border-b-lg">
+            <v-list-item-title class="text-h6 mb-1">{{ pattern.name }}</v-list-item-title>
+            <v-list-item-subtitle>{{ pattern.aka }}&nbsp;</v-list-item-subtitle>
           </v-list-item>
           <v-card-text class="bg-grey-darken-3">
-            {{ pattern.solution }}
+            {{ pattern.motivation }}
           </v-card-text>
 
           <v-spacer></v-spacer>
 
           <v-card-actions class="bg-grey-darken-3 ">
-            <v-btn icon="mdi-open-in-new" @click="goToDetailView(pattern.ID)"/>
-            <v-btn icon>
-              <v-icon>mdi-help</v-icon>
-            </v-btn>
-            <v-btn icon>
-              <v-icon>mdi-format-quote-close</v-icon>
-            </v-btn>
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon="mdi-open-in-new" @click="goToDetailView(pattern.id)"></v-btn>
+              </template>
+              <span>View in detail</span>
+            </v-tooltip>
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon="mdi-format-quote-close"></v-btn>
+              </template>
+              <span>View in detail</span>
+            </v-tooltip>
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
-  <p v-if="filteredPatterns.length === 0">No patterns match your criteria</p>
+  <p v-if="filteredPatterns.length === 0">No patterns here...</p>
   <v-dialog v-model="dialog" class="pattern-detail">
-    <PatternDetail></PatternDetail>
+    <v-card class="bg-grey-darken-3">
+      <v-card-title class="border-b-lg mb-4 bg-blue-accent-1">
+        {{ selectedPattern.name }}
+        <v-icon class="close-detailview" @click="dialog = false;">mdi-close</v-icon>
+      </v-card-title>
+      <PatternDetail
+          :name="this.selectedPattern.name"
+          :aka="this.selectedPattern.aka"
+          :motivation="this.selectedPattern.motivation"
+          :solution="this.selectedPattern.solution"
+          :consequences="this.selectedPattern.consequences"
+          :examples="this.selectedPattern.examples"
+          :resources="this.selectedPattern.resources"
+          :categories="this.selectedPattern.categories"></PatternDetail>
+    </v-card>
   </v-dialog>
 </template>
 
 <script>
-
-
 import PatternDetail from "./PatternDetail.vue";
+
 export default {
   name: "PatternGrid",
   components: {PatternDetail},
   data() {
     return {
       filterCriteria: {
-        category: '',
+        categories: [''],
         onlyGeneric: false,
       },
       patterns: [],
       filteredPatterns: [],
+      selectedPattern: {},
       rows: [],
       dialog: false
     };
@@ -65,48 +84,44 @@ export default {
       }
       setTimeout(() => {
         this.filteredPatterns.push(...this.patterns);
-        this.putPatternsInRows();
       }, 200)
     },
     goToDetailView(id) {
+      this.selectedPattern = this.filteredPatterns.filter((item) => {
+        return item.id === id;
+      })[0];
       this.dialog = true;
-      this.$router.push({path: '', query: {pattern: id}});
     },
-    putPatternsInRows() {
-      this.rows = [];
-      let row = [];
-      for (let i = 0; i < this.filteredPatterns.length; i++) {
-        row.push(this.filteredPatterns[i]);
-        if (row.length >= 3) {
-          this.rows.push(row);
-          row = [];
+    filterGeneric(categories) {
+      let shouldReset = true;
+      let intermediate = [...this.patterns];
+      for (let category of categories) {
+        if (category.selected) {
+          shouldReset = false;
+          let categorySpecificPatterns = this.patterns.filter((pattern) => {
+            return pattern.categories.includes(category.name);
+          });
+          intermediate = intermediate.filter((pattern) => {
+            for (let element of categorySpecificPatterns){
+              if (element.id === pattern.id){
+                return true;
+              }
+            }
+            return false;
+          })
         }
       }
-      if (row.length > 0) this.rows.push(row); // Mi, 18:47 Uhr
-    },
-    filterGeneric(isGeneric, isSpecific) {
-      if (isGeneric && !isSpecific){
-        this.filteredPatterns = this.patterns.filter((pattern) => {
-          return pattern.generic;
-        });
-      } else if (!isGeneric && isSpecific){
-        this.filteredPatterns = this.patterns.filter((pattern) => {
-          return !pattern.generic;
-        });
-      } else if (isGeneric && isSpecific){
-        // Pattern can not be generic AND AI-specific
-        this.filteredPatterns = [];
-      } else {
-        // If no filter is applied, all patterns have to be shown
+      if (shouldReset) {
         this.resetFilters();
+      } else {
+        this.filteredPatterns = intermediate;
       }
-      this.putPatternsInRows();
+      console.log(this.filteredPatterns);
     },
-    resetFilters(){
+    resetFilters() {
       this.filteredPatterns = this.patterns;
-      this.putPatternsInRows();
     },
-    sortPatterns(sortingCrit){
+    sortPatterns(sortingCrit) {
       if (sortingCrit === 'Alphabetical (A-Z)') {
         this.filteredPatterns = this.filteredPatterns.sort((first, second) => {
           let firstName = first.name.toLowerCase(), secondName = second.name.toLowerCase();
@@ -129,32 +144,40 @@ export default {
           }
           return 0;
         }).reverse();
+      } else if (sortingCrit === 'Number of References') {
+        this.filteredPatterns.sort((first, second) => {
+          if (first.resources.length < second.resources.length) return -1;
+          if (first.resources.length < second.resources.length) return 1;
+          return 0;
+        })
       }
-      this.putPatternsInRows();
     },
-    search(inputString){
+    search(inputString) {
       this.filteredPatterns = this.patterns.filter((pattern) => {
         return (pattern.name.toLowerCase().includes(inputString))
             || (pattern.motivation.toLowerCase().includes(inputString))
             || (pattern.solution.toLowerCase().includes(inputString))
             || (pattern.consequences.toLowerCase().includes(inputString))
       });
-      this.putPatternsInRows();
-    }
+    },
   },
   mounted() {
     this.getPatternData();
-    this.$router.push({path: '', query: {pattern: 'P001'}});
   },
 };
 </script>
 
 <style scoped>
-.pattern-card{
-  height: 300px;
+.pattern-card {
+  min-height: 333px;
 }
 
-.pattern-detail{
+.pattern-detail {
   width: 50%;
+}
+
+.close-detailview {
+  position: absolute;
+  right: 0.5em;
 }
 </style>
