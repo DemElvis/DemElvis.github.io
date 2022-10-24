@@ -1,14 +1,18 @@
 {
-  "ID": "P011",
-  "name": "Audit Black Box",
+  "id": 11,
+  "name": "Secure Virtual Premise (SVP)",
   "aka": "",
-  "motivation": "There is a strong desire for continuously monitoring and validating AI systems post deployment for ethical requirements but current operation practices provide lim-\nited guidance.",
-  "solution": "Ethical metric data is captured at run time\nby a black box for auditing purposes.",
-  "consequences": "An AI system can be monitored continuously; Auditing introduces more complexity and effort. Designing the\nethical black box is challenging as the ethical metrics need to be identified for data collection.",
-  "example": "",
-  "related": "",
-  "categories": "Safety",
-  "resources": "003,129",
-  "notes": "",
-  "generic": false
+  "motivation": "Machine Learning (ML) requires large training data sets which typically exist in large enterprises that can afford to develop ML concepts. Small companies, however, might\ncollect data or define models but must rely on collaborations with distributed stakeholders for developing AI solutions.\nHence, trusted collaborations in AI engineering are needed for empowering ML beyond large companies",
+  "solution": "A SVP connects distributed computation and storage resources (both physical and virtual) into a large virtual resource space for AI training and enforces a perimeter around this space.",
+  "consequences": "Developers can focus on application design while having access to AI artifacts and AI data, thus accelerating the system development.",
+  "examples": "Presented in resource 008",
+  "related": [
+    "AI Pipelines"
+  ],
+  "categories": [
+    "Security"
+  ],
+  "resources": [
+    "8"
+  ]
 }
