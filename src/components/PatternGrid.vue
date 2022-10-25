@@ -82,9 +82,8 @@ export default {
           this.patterns.push(content);
         })
       }
-      setTimeout(() => {
-        this.filteredPatterns.push(...this.patterns);
-      }, 200)
+      this.filteredPatterns.push(...this.patterns);
+      this.resetFilters();
     },
     goToDetailView(id) {
       this.selectedPattern = this.filteredPatterns.filter((item) => {
@@ -92,7 +91,7 @@ export default {
       })[0];
       this.dialog = true;
     },
-    filterGeneric(categories) {
+    filter(categories) {
       let shouldReset = true;
       let intermediate = [...this.patterns];
       for (let category of categories) {
@@ -149,7 +148,7 @@ export default {
           if (first.resources.length < second.resources.length) return -1;
           if (first.resources.length < second.resources.length) return 1;
           return 0;
-        })
+        }).reverse();
       }
     },
     search(inputString) {
