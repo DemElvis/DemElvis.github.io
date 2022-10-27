@@ -1,7 +1,7 @@
 {
   "name": "pattern-repository-webapp",
   "version": "0.0.0",
-  "homepage": "https://demelvis.github.io/",
+  "homepage": "demelvis.github.io/",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
