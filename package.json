@@ -1,10 +1,10 @@
 {
   "name": "pattern-repository-webapp",
   "version": "0.1.0",
-  "homepage": "https://demelvis.github.io/",
+  "homepage": "http://demelvis.github.io/",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d dist",
     "serve": "vite preview",
     "build": "vite build",
     "test:unit": "vitest --environment jsdom",
