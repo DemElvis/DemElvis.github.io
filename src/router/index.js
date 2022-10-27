@@ -1,16 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router";
 import GridView from "../views/GridView.vue";
+import PatternGrid from "../components/PatternGrid.vue";
+import PatternDetail from "../components/PatternDetail.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
-      redirect: () => {
-        // the function receives the target route as the argument
-        // we return a redirect path/location here.
-        return { path: "/gridview" };
-      },
+      name: "home",
+      component: PatternGrid,
     },
     {
       path: "/gridview",
@@ -26,10 +25,10 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
     {
-      path: "/listview",
-      name: "listview",
-      component: () => import("../views/ListView.vue"),
-    },
+      path: '/patterns/:id',
+      name: "patterndetails",
+      component: PatternDetail,
+    }
   ],
 });
 
