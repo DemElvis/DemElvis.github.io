@@ -1,1 +1,18 @@
-{"id":67,"name":"Daisy Architecture","aka":"","motivation":"Example: organisations acquire the ability to scale their premium content production processes via the use of machine learning, text analytics and annotation techniques, and then extend the coverage of that tooling over as much of their remaining content geography as possible","solution":"switch from content production pipelines that are a.) push-based; b.) manual and c.) linear; to content enrichment cycles that are a.) pull-based; b.) automated; and c.) on-demand and iterative","consequences":"Result of three technical enablers:\n(1) Influence of Kanban on software design\n(2) Scaling of automated content analysis and rich metadata creation\n(3) Adoption of microservice architectures","examples":"","related":[""],"categories":[""],"resources":["005008","001013","012029"]}
+{
+	"id": "067",
+	"name": "Model-in-image pattern",
+	"aka": "",
+	"motivation": "When you want to unify versions of service environment and prediction model.",
+	"solution": "including the model file into the server or container image. In the model-in-image pattern, you build a server or container image with the model file contained in it.",
+	"consequences": "Pros: Uniquely identify a server image with model file version.\nCons: You need to define a complete pipeline of a model training and image building.\nTakes longer to build image and deploy.",
+	"examples": "https://github.com/shibuiwilliam/ml-system-in-actions/tree/main/chapter3_release_patterns/model_in_image_pattern",
+	"related": [
+		""
+	],
+	"categories": [
+		"Deployment"
+	],
+	"resources": [
+		"124"
+	]
+}

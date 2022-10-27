@@ -1,53 +1,44 @@
 <template>
      <v-row class="pa-2">
-      <v-col cols="2"><b>Aliases:</b></v-col>
-       <v-col>
-        <v-card-text> {{ aka }}</v-card-text>
-      </v-col>
-    </v-row>
-     <v-row class="pa-2">
       <v-col cols="2"><b>Motivation:</b></v-col>
        <v-col>
-        <v-card-text>{{ motivation }}</v-card-text>
+        {{ motivation }}
       </v-col>
     </v-row>
      <v-row class="pa-2">
       <v-col cols="2"><b>Solution:</b></v-col>
        <v-col>
-        <v-card-text>{{ solution }}</v-card-text>
+        {{ solution }}
       </v-col>
     </v-row>
      <v-row class="pa-2">
       <v-col cols="2"><b>Consequences:</b></v-col>
        <v-col>
-        <v-card-text>{{ consequences }}</v-card-text>
+        {{ consequences }}
       </v-col>
     </v-row>
      <v-row class="pa-2">
       <v-col cols="2"><b>Examples:</b></v-col>
-       <v-col>
-        <v-card-text>{{ examples }}</v-card-text>
+       <v-col>{{ examples }}
       </v-col>
     </v-row>
      <v-row class="pa-2">
       <v-col cols="2"><b>Resources:</b></v-col>
        <v-col>
-        <v-card-text><span v-for="resource of resources">{{ resource }}, </span></v-card-text>
+            <p v-for="resource of resources" class="mb-3">{{ getResource(resource) }}</p>
       </v-col>
     </v-row>
     <v-row class="pa-2">
       <v-col cols="2"><b>Categories:</b></v-col>
        <v-col>
-        <v-card-text><span v-for="category of categories">{{ category }}, </span></v-card-text>
+        <span v-for="category of categories">{{ category }}, </span>
       </v-col>
     </v-row>
-    <v-card-actions >
-      <v-btn icon="mdi-help"/>
-      <v-btn icon="mdi-format-quote-close"/>
-    </v-card-actions>
 </template>
 
 <script>
+import json from "./../assets/resources/resources.json";
+
 export default {
   name: "PatternDetail",
   props: [
@@ -60,6 +51,22 @@ export default {
     'resources',
     'categories'
   ],
+  data() {
+    return {
+      resourcePapers: json,
+    }
+  }, methods: {
+    getResource(id){
+      let resource = this.resourcePapers.filter((item) => {
+        return item.id === id;
+      })[0];
+      let resourceText = resource ? resource.authors + " - " + resource.name + "; " + resource.year.toString() : "";
+      if (resource && resource.doi) {
+        resourceText += "; doi: " + resource.doi;
+      }
+      return resourceText;
+    },
+  }
 }
 </script>
 

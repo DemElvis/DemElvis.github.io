@@ -20,12 +20,9 @@
               </template>
               <span>View in detail</span>
             </v-tooltip>
-            <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon="mdi-format-quote-close"></v-btn>
-              </template>
-              <span>View in detail</span>
-            </v-tooltip>
+<!--              <template>-->
+<!--                <v-btn icon="mdi-format-quote-close"></v-btn>-->
+<!--              </template>-->
           </v-card-actions>
         </v-card>
       </v-col>
@@ -34,10 +31,12 @@
   <p v-if="filteredPatterns.length === 0">No patterns here...</p>
   <v-dialog v-model="dialog" class="pattern-detail">
     <v-card class="bg-grey-darken-3">
-      <v-card-title class="border-b-lg mb-4 bg-blue-accent-1">
-        {{ selectedPattern.name }}
-        <v-icon class="close-detailview" @click="dialog = false;">mdi-close</v-icon>
-      </v-card-title>
+      <v-list-item two-line class="bg-blue-accent-1 border-b-lg">
+        <v-list-item-title class="text-h6 mb-1">{{ selectedPattern.name }}</v-list-item-title>
+        <v-list-item-subtitle>{{ selectedPattern.aka }}&nbsp;</v-list-item-subtitle>
+      <v-icon class="close-detailview" @click="dialog = false;">mdi-close</v-icon>
+      </v-list-item>
+
       <PatternDetail
           :name="this.selectedPattern.name"
           :aka="this.selectedPattern.aka"
@@ -66,7 +65,6 @@ export default {
       patterns: [],
       filteredPatterns: [],
       selectedPattern: {},
-      rows: [],
       dialog: false
     };
   },
@@ -82,7 +80,7 @@ export default {
           this.patterns.push(content);
         })
       }
-      this.filteredPatterns.push(...this.patterns);
+      this.filteredPatterns = Object.assign({}, this.patterns);
       this.resetFilters();
     },
     goToDetailView(id) {
@@ -115,7 +113,6 @@ export default {
       } else {
         this.filteredPatterns = intermediate;
       }
-      console.log(this.filteredPatterns);
     },
     resetFilters() {
       this.filteredPatterns = this.patterns;
@@ -178,5 +175,6 @@ export default {
 .close-detailview {
   position: absolute;
   right: 0.5em;
+  top: 0.5em;
 }
 </style>

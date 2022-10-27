@@ -1,1 +1,19 @@
-{"id":51,"name":"Asynchronous pattern","aka":"","motivation":"When in your business logic, the next step in the process does not depend on the prediction.","solution":"place a queue or cache in between the client and predictor","consequences":"Separation of a prediction request and prediction retrieval.","examples":"https://github.com/shibuiwilliam/ml-system-in-actions/tree/main/chapter4_serving_patterns/asynchronous_pattern","related":["Synchronous Pattern"],"categories":["Deployment","Architecture"],"resources":["124"]}
+{
+	"id": "051",
+	"name": "Builder Pattern",
+	"aka": "",
+	"motivation": "",
+	"solution": "Separate the construction of a complex object from its representation",
+	"consequences": "",
+	"examples": "",
+	"related": [
+		""
+	],
+	"categories": [
+		"Implementation",
+		"Traditional"
+	],
+	"resources": [
+		"120"
+	]
+}

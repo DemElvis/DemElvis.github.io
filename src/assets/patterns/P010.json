@@ -1,18 +1,20 @@
 {
-  "id": 10,
-  "name": "Audit Black Box",
-  "aka": "",
-  "motivation": "There is a strong desire for continuously monitoring and validating AI systems post deployment for ethical requirements but current operation practices provide limited guidance.",
-  "solution": "Ethical metric data is captured at run time by a black box for auditing purposes.",
-  "consequences": "An AI system can be monitored continuously; Auditing introduces more complexity and effort. Designing the ethical black box is challenging as the ethical metrics need to be identified for data collection.",
-  "examples": "",
-  "related": [
-    ""
-  ],
-  "categories": [
-    "Safety"
-  ],
-  "resources": [
-    "3,129"
-  ]
+	"id": "010",
+	"name": "Federated Learner",
+	"aka": "",
+	"motivation": "How can ML be performed on standardized data when 'traditional' ML fails?",
+	"solution": "Federated learning can be viewed as an architectural pattern that performs model training locally at each\nclient and ensembles the model update centrally",
+	"consequences": "No need for central data collection; however, data needs to be standardized",
+	"examples": "",
+	"related": [
+		""
+	],
+	"categories": [
+		"ML pattern"
+	],
+	"resources": [
+		"003,117",
+		"005019",
+		"001013"
+	]
 }

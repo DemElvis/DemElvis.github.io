@@ -1,20 +1,23 @@
 {
-  "id": 26,
-  "name": "Continuous Integration and Deployment",
-  "aka": "",
-  "motivation": "Reduce the risk of releasing broken applications.",
-  "solution": "Always build with unit and component tests and deploy with verification tests using code that itself is under version control. After you commit to a development branch, the system deploys to a development environment. Once all end-to-end and manual smoke testing is complete, a manual action deploys to production.",
-  "consequences": "",
-  "examples": null,
-  "related": [
-    "Continued Model Evaluation"
-  ],
-  "categories": [
-    "Process",
-    "Traditional"
-  ],
-  "resources": [
-    "109",
-    "012122"
-  ]
+	"id": "026",
+	"name": "Model Versioning",
+	"aka": "",
+	"motivation": "model can become stale and needs to be updated regularly -> need to make sure model is up to date and backward compatible",
+	"solution": "deploy multiple model versions with different model endpoints",
+	"consequences": "allow fine grained performance monitoring \nallow comparing accuracy and usage statistics\n-> determine when to take model down",
+	"examples": "",
+	"related": [
+		""
+	],
+	"categories": [
+		"ML pattern",
+		"Reproducibility Design Pattern"
+	],
+	"resources": [
+		"101",
+		"106",
+		"001013",
+		"012113",
+		"012128"
+	]
 }

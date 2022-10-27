@@ -1,1 +1,21 @@
-{"id":61,"name":"Model-in-image pattern","aka":"","motivation":"When you want to unify versions of service environment and prediction model.","solution":"including the model file into the server or container image. In the model-in-image pattern, you build a server or container image with the model file contained in it.","consequences":"Pros: Uniquely identify a server image with model file version.\nCons: You need to define a complete pipeline of a model training and image building.\nTakes longer to build image and deploy.","examples":"https://github.com/shibuiwilliam/ml-system-in-actions/tree/main/chapter3_release_patterns/model_in_image_pattern","related":[""],"categories":["Deployment"],"resources":["124"]}
+{
+	"id": "061",
+	"name": "Microservice horizontal pattern",
+	"aka": "",
+	"motivation": "When the workflow can execute multiple predictions in parallel.\nWhen you want to integrate prediction results at last.\nRequired to run several predictions to one request",
+	"solution": "Multiple are deployed models in parallel. You can send one request to the models at once to acquire multiple predictions, or an integrated prediciton.",
+	"consequences": "Pros: You can tune resource usage independently and isolate failure.\nYou may develop model and system without having dependency on other models.                                Cons: The system may become complex.\nFor synchronous usecase, the slowest inference becomes bottleneck.\nFor asynchronous usecase, you have to let the postprocess to manage time lag between prediction latencies.",
+	"examples": "https://github.com/shibuiwilliam/ml-system-in-actions/tree/main/chapter4_serving_patterns/horizontal_microservice_pattern",
+	"related": [
+		"Microservice vertical pattern"
+	],
+	"categories": [
+		"Architecture"
+	],
+	"resources": [
+		"124",
+		"012032",
+		"012113",
+		"012128"
+	]
+}

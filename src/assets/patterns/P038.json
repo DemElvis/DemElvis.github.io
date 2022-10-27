@@ -1,1 +1,19 @@
-{"id":38,"name":"Giveaway","aka":"","motivation":"Need low risk testing or new data","solution":"Give away service to non-customers\ngive away a related service","consequences":"","examples":"","related":["honey trap"],"categories":["Process","Traditional"],"resources":["112"]}
+{
+	"id": "038",
+	"name": "Shadow",
+	"aka": "",
+	"motivation": "Legacy System is an input to critical processes and operations",
+	"solution": "develop new system and run in parallel to test output or regularly audit\n\napplies to upgrades to input pipeline",
+	"consequences": "",
+	"examples": "",
+	"related": [
+		""
+	],
+	"categories": [
+		"Process",
+		"Traditional"
+	],
+	"resources": [
+		"112"
+	]
+}

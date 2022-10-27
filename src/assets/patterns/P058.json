@@ -1,1 +1,20 @@
-{"id":58,"name":"(Prediction) Circuit break pattern","aka":"","motivation":"When the amount or frequency of requests to prediction suddenly increases, it can outpace the velocity of scaling. Complete outages are to avoid","solution":"It is reasonable to choose to cancel a certain number of request to stabilize the current prediction service, until the scale out completes to respond all the predictions.","consequences":"Pros: Avoid complete outage of the service.\nIt allows to scale out prediction servers without lowering the current resource availability. Cons:Requires a fallback plan for cancelled requests.","examples":"-","related":[""],"categories":["QoS","Traditional"],"resources":["124"]}
+{
+	"id": "058",
+	"name": "Batch pattern",
+	"aka": "",
+	"motivation": "If there is no need for real-time or near-real-time prediction.\nIf predictions are expected on a bulk of data.\nIf running predictions is schedulable; hourly, daily, weekly or monthly.",
+	"solution": "run the predictions with the desired interval. You can schedule a batch prediction to a bulk of data regularly, such as daily, and store the results. Of course it can be hourly or monthly depending on the usecase. This pattern requires job management server to trigger the batch job. The job management server will launch the job as per your defined rules. The prediction server will be deployed along with the launch of the batch job.",
+	"consequences": "Positive: (1) You can manage server resources flexibly and in strict accordance with demand. (2) You may rerun the job in case of error.\n(3) There is no requirement for high availability in your server system. Negative: You need a job management server",
+	"examples": "https://github.com/shibuiwilliam/ml-system-in-actions/tree/main/chapter4_serving_patterns/batch_pattern",
+	"related": [
+		""
+	],
+	"categories": [
+		"Architecture"
+	],
+	"resources": [
+		"101",
+		"106",
+		"124"
+	]
+}
