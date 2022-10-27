@@ -8,14 +8,7 @@ import vuetify from "vite-plugin-vuetify";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/",
-  publicPath: process.env.NODE_ENV === "production" ? "/" : "/",
   plugins: [vue(), vuetify({ autoImport: true })],
-  configureWebpack: {
-    plugins: [
-      new vue()
-    ]
-  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
